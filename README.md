@@ -1,6 +1,7 @@
-# Monitoring-Light-intensity-value-in-Thing-speak-cloud
+# EX-04  Monitoring Light intensity value in ThinG speak cloud
 # Uploading LDR sensor data in Thing Speak cloud
-
+### NAME : OVIYA P
+### REG NO: 212223110033
 # AIM:
 To monitor the Light-intensity value in the Thing speak cloud using LDR sensor and ESP32 controller.
 # Apparatus required:
@@ -90,8 +91,87 @@ Prototype and build IoT systems without setting up servers or developing web sof
 
  
 # PROGRAM:
+```
+#include "ThingSpeak.h"
+#include <WiFi.h>
+
+char ssid[] = "shashu";//your wifi ssid//
+char pass[] = "SHASHWATH";//your wifi pass//
+
+#define ldr_pin 34
+#define led_pin 2
+int ldrValue = 0;
+int lightPercentage = 0;
+const int darkValue = 4095;
+const int brightValue = 0;
+WiFiClient client;
+
+unsigned long myChannelField =3104401;
+const int lightPercentageField = 1;
+const char* myWriteAPIKey = "WEFEQHEXUB7IVICW";
+
+
+
+void setup() {
+  Serial.begin(115200);
+  ThingSpeak.begin(client);
+  WiFi.mode(WIFI_STA);
+  pinMode(ldr_pin,INPUT);
+  pinMode(led_pin,OUTPUT);
+
+
+}
+
+void loop() {
+  ldrValue= analogRead(ldr_pin);
+
+  lightPercentage= map(ldrValue,darkValue,brightValue,0,100);
+
+  lightPercentage=constrain(lightPercentage,0,100);
+
+  
+
+  if(WiFi.status() != WL_CONNECTED)
+  {
+    Serial.print("Attempting to connect SSID: ");
+    Serial.print(ssid);
+    while(WiFi.status() != WL_CONNECTED)
+    {
+      WiFi.begin(ssid,pass);
+      Serial.print(".");
+      delay(5000);
+    }
+    Serial.println("\nConnected.");
+  }
+  Serial.println("Intensity");
+  Serial.println(lightPercentage);
+  Serial.println("%");
+  if(lightPercentage<50)
+  {
+    digitalWrite(led_pin,HIGH);
+  }
+  else
+  {
+    digitalWrite(led_pin,LOW);
+  }
+  delay(5000);
+
+//ThingSpeak.setField(lightPercentageField,lightPercentage);
+//ThingSpeak.writeFields(myChannelField,myWriteAPIKey);
+
+
+ThingSpeak.writeField(myChannelField, lightPercentageField, lightPercentage,myWriteAPIKey);
+delay(5000);
+
+
+}
+```
 # CIRCUIT DIAGRAM:
+<img width="390" height="453" alt="image" src="https://github.com/user-attachments/assets/ce42cb4e-8061-445d-9513-3a93ef8d6f75" />
+
 # OUTPUT:
+![WhatsApp Image 2025-10-08 at 09 37 29_08f13e21](https://github.com/user-attachments/assets/ead3704b-8a7e-46a4-8aab-48f1b9a84cfa)
+
 # RESULT:
 
 Thus the light intensity values are updated in the Thing speak cloud using ESP32 controller.
