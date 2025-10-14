@@ -1,5 +1,5 @@
 # EX-04  Monitoring Light intensity value in ThinG speak cloud
-# Uploading LDR sensor data in Thing Speak cloud
+
 ### NAME : OVIYA P
 ### REG NO: 212223110033
 # AIM:
